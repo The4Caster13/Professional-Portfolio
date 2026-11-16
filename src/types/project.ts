@@ -75,6 +75,9 @@ export interface CodeInfo {
   fallbackLanguages: Record<string, number>; // snapshot of /languages for when the api is unavailable
 }
 
+// filters on the All Projects page (labels and order: projectCategories in src/data/projects.ts)
+export type ProjectCategory = "architecture" | "business" | "research" | "coding";
+
 export interface Project {
   title: string;
   image: string;
@@ -82,6 +85,7 @@ export interface Project {
   year: string;
   location: string;
   featured: boolean;
+  categories: ProjectCategory[]; // which filters the project shows under (can be more than one)
   construction?: boolean;
   details?: string;
   images?: MediaItem[];

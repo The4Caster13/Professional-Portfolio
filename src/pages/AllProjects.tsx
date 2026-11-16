@@ -1,13 +1,35 @@
 import React, { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import { projectsData } from "@/data/projects";
+import { projectCategories, projectsData } from "@/data/projects";
+import type { ProjectCategory } from "@/types/project";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import GitHubStrip from "@/components/GitHubStrip";
 
 const AllProjects = () => {
   const navigate = useNavigate();
+
+  // the active filter lives in the url (?category=research) so it survives going into a project and back
+  const [searchParams, setSearchParams] = useSearchParams();
+  const param = searchParams.get("category");
+  const active = projectCategories.find((c) => c.id === param)?.id ?? null;
+
+  const setFilter = (id: ProjectCategory | null) =>
+    setSearchParams(id ? { category: id } : {}, { replace: true });
+
+  // keep each project's position in projectsData, since /project/:id links use it
+  const visible = projectsData
+    .map((project, index) => ({ project, index }))
+    .filter(({ project }) => !active || project.categories.includes(active));
+
+  const filters = [
+    { id: null, label: "All", count: projectsData.length },
+    ...projectCategories.map((c) => ({
+      ...c,
+      count: projectsData.filter((p) => p.categories.includes(c.id)).length,
+    })),
+  ];
 
   useEffect(() => {
     document.title = "All Projects - Matthew Chen";
@@ -54,7 +76,7 @@ const AllProjects = () => {
         <div className="container px-6 md:px-12 relative z-10">
 
           {/* title */}
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
               ALL PROJECTS
             </h1>
@@ -63,9 +85,36 @@ const AllProjects = () => {
             </p>
           </div>
 
+          {/* category filter */}
+          <div role="group" aria-label="Filter projects by category" className="flex flex-wrap justify-center gap-2 mb-12">
+            {filters.map((f) => {
+              const selected = active === f.id;
+              return (
+                <button
+                  key={f.label}
+                  type="button"
+                  aria-pressed={selected}
+                  onClick={() => setFilter(f.id)}
+                  className={`px-4 py-2 rounded-full border text-sm uppercase tracking-wide transition-colors ${
+                    selected
+                      ? "bg-gray-900 border-gray-900 text-white"
+                      : "bg-white/70 border-gray-300 text-gray-700 hover:border-gray-900 hover:text-gray-900"
+                  }`}
+                >
+                  {f.label}
+                  <span className={`ml-2 text-xs ${selected ? "text-white/70" : "text-gray-400"}`}>{f.count}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {visible.length === 0 && (
+            <p className="text-center text-muted-foreground py-16">No projects in this category yet.</p>
+          )}
+
           {/* projects grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {projectsData.map((project, index) => (
+            {visible.map(({ project, index }) => (
               <div
                 key={index}
                 onClick={() => navigate(`/project/${index}`)}
@@ -102,8 +151,8 @@ const AllProjects = () => {
             ))}
           </div>
 
-          {/* other public repos, live from github */}
-          <GitHubStrip />
+          {/* pinned github repos, live; only with All or Coding selected */}
+          {(!active || active === "coding") && <GitHubStrip />}
         </div>
       </main>
 

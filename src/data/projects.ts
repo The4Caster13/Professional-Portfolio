@@ -2,11 +2,12 @@
 //
 // - Order here = order on the All Projects page, and the /project/N links (N = position, starting at 0).
 // - featured: true also puts a project in "Featured Projects" on the home page.
+// - categories decides which All Projects filters it appears under (one or more of the ids in projectCategories).
 // - image is the card thumbnail. Thumbnails for the research and code projects live in
 //   src/Assets/thumbnails/: drop your own .jpg over the placeholder with the same name.
 // - A project with a `research` block gets the research layout (chart + PDF download);
 //   one with a `code` block gets the GitHub case-study layout. Everything else uses the gallery layout.
-import type { MediaItem, Project, ResearchChart } from "@/types/project";
+import type { MediaItem, Project, ProjectCategory, ResearchChart } from "@/types/project";
 
 // ---------- design assets ----------
 // snowboard
@@ -45,7 +46,6 @@ import momentumThumb from "../Assets/thumbnails/momentum-lab.jpg";
 // ---------- code assets ----------
 import morraThumb from "../Assets/thumbnails/morraai.jpg";
 import dashboardThumb from "../Assets/thumbnails/financial-dashboard.jpg";
-import agentsThumb from "../Assets/thumbnails/multi-agent-equity-research.jpg";
 
 const normalizeImages = (arr: (string | MediaItem)[]): MediaItem[] => {
   return arr.map((item) => {
@@ -133,6 +133,14 @@ const momentumChart: ResearchChart = {
   ],
 };
 
+// filter buttons on the All Projects page, in this order
+export const projectCategories: { id: ProjectCategory; label: string }[] = [
+  { id: "architecture", label: "Architecture" },
+  { id: "business", label: "Business" },
+  { id: "research", label: "Research" },
+  { id: "coding", label: "Coding" },
+];
+
 export const projectsData: Project[] = [
   // =====================================================================
   // DESIGN & ARCHITECTURE
@@ -147,6 +155,7 @@ export const projectsData: Project[] = [
     year: "2024-2025",
     location: "San Jose, CA",
     featured: true,
+    categories: ["architecture"],
     details:
       "The Bayside Mansion was a project that began in 10th grade during Art Class when we were told to create a meaningful art project. My passion for architecture, as well as my ",
     images: normalizeImages([
@@ -173,6 +182,7 @@ export const projectsData: Project[] = [
     year: "2025",
     location: "Toronto, ON",
     featured: true,
+    categories: ["architecture"],
     details: "",
     images: normalizeImages([
       { url: change, type: "image" },
@@ -190,8 +200,9 @@ export const projectsData: Project[] = [
     description:
       "While drawings and sketches are great for brainstorming and idea generation, ultimately bringing your ideas into 3D helps to visualize the real end-product. My goal was to learn SketchUp and become proficient in using 3D modelling softwares to improve my technical skills and help bring my ideas to life.",
     year: "2025",
-    location: "Thornhill, ON",
+    location: "Toronto, ON",
     featured: false,
+    categories: ["architecture"],
     details:
       "While drawings and sketches are great for brainstorming and idea generation, ultimately bringing your ideas into 3D helps to visualize the real end-product. My goal was to learn SketchUp and become proficient in using 3D modelling softwares to improve my technical skills and help bring my ideas to life.",
     images: normalizeImages([
@@ -210,6 +221,7 @@ export const projectsData: Project[] = [
     year: "2024",
     location: "North York, ON",
     featured: true,
+    categories: ["architecture"],
     images: [
       { url: prop, type: "image" },
       { url: initial, type: "image" },
@@ -232,6 +244,7 @@ export const projectsData: Project[] = [
     year: "2026",
     location: "Thornhill, ON",
     featured: false,
+    categories: ["research"],
     research: {
       subject: "Physics · Internal Assessment",
       researchQuestion:
@@ -292,6 +305,7 @@ export const projectsData: Project[] = [
     year: "2026",
     location: "Thornhill, ON",
     featured: false,
+    categories: ["research"],
     research: {
       subject: "Chemistry · Internal Assessment",
       researchQuestion:
@@ -353,6 +367,7 @@ export const projectsData: Project[] = [
     year: "2026",
     location: "Thornhill, ON",
     featured: false,
+    categories: ["research"],
     research: {
       subject: "Physics · Lab Report (SPH4U)",
       researchQuestion:
@@ -401,6 +416,7 @@ export const projectsData: Project[] = [
     year: "2026",
     location: "Thornhill, ON",
     featured: false,
+    categories: ["coding"],
     code: {
       repo: "MorraAI",
       tagline: "An AI examiner for IB French oral practice",
@@ -433,6 +449,7 @@ export const projectsData: Project[] = [
     year: "2026",
     location: "Thornhill, ON",
     featured: false,
+    categories: ["coding", "business"],
     code: {
       repo: "Financial-Dashboard",
       tagline: "A live equity research terminal in Python",
@@ -456,39 +473,9 @@ export const projectsData: Project[] = [
       fallbackLanguages: { Python: 67758, CSS: 5517 },
     },
   },
-
-  // multi-agent equity research
-  {
-    image: agentsThumb,
-    title: "Multi-Agent Equity Research",
-    description:
-      "A team of Gemini AI agents that reads filings and macro news, values a company several ways, and writes a full research report.",
-    year: "2026",
-    location: "Thornhill, ON",
-    featured: false,
-    code: {
-      repo: "Multi-Agent-Equity-Research",
-      tagline: "AI agents that write equity research reports",
-      problem:
-        "A real equity research team splits the work: someone tracks macro events, someone reads the filings, someone builds the valuation, and someone makes the call. This project rebuilds that structure with AI agents, so a full research report can be produced end to end.",
-      howItWorks: [
-        "The program pulls up-to-date financial documents and filings for a company.",
-        "Gemini agents process them, each covering a part of the analysis, from macro events to company-specific developments.",
-        "The agents value the company using several valuation techniques.",
-        "Their work is combined into a closed-loop research report with a final decision, structured like a hedge fund's research team.",
-      ],
-      features: [
-        "Multiple specialized Gemini agents working together",
-        "Live financial documents and filings as input",
-        "Several valuation methods combined into one view",
-        "End-to-end report generation with a final recommendation",
-        "Python agent service with a React Native (Expo) app front end",
-      ],
-      stack: ["Python", "Gemini API", "TypeScript", "React Native (Expo)", "Express", "NativeWind"],
-      fallbackLanguages: { TypeScript: 82749, Python: 60390, HTML: 33849, CSS: 18967, JavaScript: 12600 },
-    },
-  },
 ];
 
-// repos that already have a case study, so the live "More on GitHub" strip doesn't repeat them
-export const caseStudyRepos = projectsData.flatMap((p) => (p.code ? [p.code.repo] : []));
+// "More on GitHub" on the All Projects page shows exactly these repos, in this order.
+// Keep it matching the pinned repos on github.com/The4Caster13 (exact repo names).
+// GitHub's public API can't read pins without a login token, so this list is the source of truth.
+export const pinnedRepos = ["Professional-Portfolio", "Financial-Dashboard", "MorraAI"];

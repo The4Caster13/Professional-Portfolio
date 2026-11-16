@@ -70,7 +70,7 @@ const Navbar = () => {
         <nav className="hidden md:flex space-x-8 text-sm font-medium">
           <button onClick={() => navigate('/photography')} className="hover:text-gray-600 transition-colors">Photography</button>
           <button onClick={() => navigate('/projects')} className="hover:text-gray-600 transition-colors">Projects</button>
-          <button onClick={() => scrollToSection('about')} className="hover:text-gray-600 transition-colors">About</button>
+          <button onClick={() => navigate('/about')} className="hover:text-gray-600 transition-colors">About</button>
           <button onClick={() => scrollToSection('philosophy')} className="hover:text-gray-600 transition-colors">Philosophy</button>
           <button onClick={() => scrollToSection('contact')} className="hover:text-gray-600 transition-colors">Contact</button>
         </nav>
@@ -80,7 +80,7 @@ const Navbar = () => {
           <div className="flex flex-col items-center justify-center h-full space-y-8 text-lg font-medium">
             <button onClick={() => { navigate('/photography'); setMenuOpen(false); }} className="hover:text-gray-600 transition-colors">Photography</button>
             <button onClick={() => { navigate('/projects'); setMenuOpen(false); }} className="hover:text-gray-600 transition-colors">Projects</button>
-            <button onClick={() => scrollToSection('about')} className="hover:text-gray-600 transition-colors">About</button>
+            <button onClick={() => { navigate('/about'); setMenuOpen(false); }} className="hover:text-gray-600 transition-colors">About</button>
             <button onClick={() => scrollToSection('philosophy')} className="hover:text-gray-600 transition-colors">Philosophy</button>
             <button onClick={() => scrollToSection('contact')} className="hover:text-gray-600 transition-colors">Contact</button>
           </div>

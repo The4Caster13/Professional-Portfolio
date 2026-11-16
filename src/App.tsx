@@ -11,6 +11,8 @@ import AllProjects from "./pages/AllProjects";
 import PhotoDetail from "./pages/PhotoDetail";
 import PhotographyDetail from "./pages/PhotographyDetail";
 import NotFound from "./pages/404";
+import AboutPage from "./pages/AboutPage";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -20,6 +22,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<AllProjects />} />
@@ -27,6 +30,7 @@ const App = () => (
           <Route path="/photography" element={<Photography />} />
           <Route path="/photography/:id" element={<PhotographyDetail />} />
           <Route path="/photo/:id" element={<PhotoDetail />} />
+          <Route path="/about" element={<AboutPage />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
