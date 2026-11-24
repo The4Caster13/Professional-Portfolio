@@ -1,7 +1,16 @@
 import React, { useEffect, useRef } from "react";
 import ProjectCard from "./ProjectCard";
 // every project (design, research, code) lives in src/data/projects.ts
-import { projectsData } from "@/data/projects";
+import { featuredProjects, projectsData } from "@/data/projects";
+
+// featuredProjects is a list of titles; turn it into project indexes, keeping its order
+const featuredIndexes = featuredProjects
+  .map((title) => {
+    const i = projectsData.findIndex((p) => p.title === title);
+    if (i < 0) console.warn(`featuredProjects: no project titled "${title}" in src/data/projects.ts`);
+    return i;
+  })
+  .filter((i) => i >= 0);
 
 const Projects = () => {
   const titleRef = useRef<HTMLDivElement>(null);
@@ -23,8 +32,6 @@ const Projects = () => {
       if (titleRef.current) observer.unobserve(titleRef.current);
     };
   }, []);
-
-  const featured = projectsData.filter((p) => p.featured);
 
   return (
     <section id="projects" className="relative py-24 md:py-32 overflow-hidden">
@@ -112,8 +119,8 @@ const Projects = () => {
         </div>
 
         <div className="space-y-12">
-          {featured.map((project) => {
-            const index = projectsData.findIndex((p) => p === project);
+          {featuredIndexes.map((index, position) => {
+            const project = projectsData[index];
             return (
               <ProjectCard
                 key={index}
@@ -123,6 +130,7 @@ const Projects = () => {
                 year={project.year}
                 location={project.location}
                 index={index}
+                position={position}
               />
             );
           })}

@@ -8,7 +8,8 @@ interface ProjectCardProps {
   description: string;
   year: string;
   location: string;
-  index: number;
+  index: number; // position in projectsData, used for the /project/N link
+  position?: number; // position in the list on screen, used to alternate image left/right
 }
   // each project's different specs
 const ProjectCard: React.FC<ProjectCardProps> = ({ 
@@ -17,7 +18,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   description, 
   year, 
   location,
-  index
+  index,
+  position = index
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
@@ -43,7 +45,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     };
   }, []);
 
-  const animationClass = index % 2 === 0 ? 'from-left' : 'from-right';
+  const animationClass = position % 2 === 0 ? 'from-left' : 'from-right';
 
   return (
     <div
@@ -51,7 +53,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       className={`reveal ${animationClass} flex flex-col md:flex-row mb-24 last:mb-0`}
     >
       {/* main project image (will def change this code) */}
-      <div className={`w-full md:w-7/12 ${index % 2 !== 0 ? 'md:order-2' : ''}`}>
+      <div className={`w-full md:w-7/12 ${position % 2 !== 0 ? 'md:order-2' : ''}`}>
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg">
           <img 
             src={image} 
@@ -62,7 +64,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       </div>
 
       {/* project info (i need to change the entire project part) */}
-      <div className={`w-full md:w-5/12 ${index % 2 !== 0 ? 'md:order-1 md:pr-12' : 'md:pl-12'} flex flex-col justify-center mt-6 md:mt-0`}>
+      <div className={`w-full md:w-5/12 ${position % 2 !== 0 ? 'md:order-1 md:pr-12' : 'md:pl-12'} flex flex-col justify-center mt-6 md:mt-0`}>
         <div className="border-b border-gray-300 pb-2 mb-4">
           <span className="text-sm text-gray-500">{year}{location && ` | ${location}`}</span>
         </div>

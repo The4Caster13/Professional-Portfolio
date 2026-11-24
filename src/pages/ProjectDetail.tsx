@@ -8,6 +8,7 @@ import type { MediaItem, Project } from "@/types/project";
 import STLViewer from "@/components/STLViewer";
 import ResearchDetail from "@/components/ResearchDetail";
 import CodeDetail from "@/components/CodeDetail";
+import PitchDetail from "@/components/PitchDetail";
 
 const ProjectDetail = () => {
   const { id } = useParams();
@@ -43,6 +44,11 @@ const ProjectDetail = () => {
     return <CodeDetail title={project.title} year={project.year} code={project.code} />;
   }
 
+  // stock pitches + investment memos
+  if (project.pitch) {
+    return <PitchDetail title={project.title} year={project.year} pitch={project.pitch} />;
+  }
+
   const media: MediaItem[] =
     project.images && project.images.length > 0
       ? project.images
@@ -66,7 +72,7 @@ const ProjectDetail = () => {
         <div className="container px-6 md:px-12 py-24">
           {/* back button */}
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/projects")}
             className="text-charcoal mb-6 hover:text-forest-green"
           >
             ← Back to projects
